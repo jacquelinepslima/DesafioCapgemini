@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Calculadora de anúncio</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <body class="container">
+    <header class="cabeca " id="cabeca">
+        <h1>Controle de Anúncios</h1>
+        
+    </header>
+    <nav class="navegar" id="navegar">
+        <ul class="ol " >
+            <li> <a href="#">Página inicial</a></li>
+            <li><a href="#all" >Cadastro</a></li>
+        </ul>
+
+    </nav>
+    <aside class="aside" id="aside">
+            <dl>
+            <dt><h4>Como cadastrar meu anúncio?</h4></dt>
+            <br>
+            <dd>Nesta página você poderá inserir os valores do anúncio no formulário, o sistema irá armazenar as informações para serem verificadas.
+            </dd>
+            <br>
+            <dt><h4>Como vou ter o retorno de visualizações conforme o valor investido?</h4></dt>
+            <br>
+            <dd>No último campo do formulário voce poderá inserir o valor do investimento e o sistema retornará a quantidade total de visualizações.
+            </dd>
+            </dl>
+
+    </aside>
+    <section class="secao" id="secao">
+        <form action="script.js" method="GET" id="all" class="all" all>
+            <fieldset>
+              
+                    <h2>Cadastro de Anúncios</h2>
+                   <label for="qtd"> <h3>Quantos anúncios deseja cadastrar? </h3></label>
+                   <input type="tel" name="qtd" id="qtd" class="qtd" qtd>
+                   <input type="button" onclick="render()" value="Enviar">
+                   <label><span>
+                   
+                   <h3 id="exporAnuncio"></h3>
+                
+
+                <label for="nome">
+                    <h4>Nome do anúncio:</h4>
+                </label>
+                <input type="tel" name="anuncio" id="nome" class="nome" data-list-nome >
+                <!-- <input type="submit" onclick="receber()" value="Enviar">-->
+               
+                <label><span>
+          
+                    <h3 id="anunciar" anunciar></h3>
+
+                <label for="nome">
+                    <h4>Nome do cliente:</h4>
+                </label>
+                <input type="tel" name="nome" id="nome" class="nome" data-list-nome >
+                <!-- <input type="submit" onclick="receber()" value="Enviar">-->
+                
+                <label><span>
+                        
+                    <h3 id="nomeR"></h3>
+
+                <label for="dataI">
+                    <h4>Data de inicio:</h4>
+                </label>
+                <input type="date" name="dataI" id="dataI" class="dataI" data-list-dataI >
+                <!-- <input type="submit" onclick="receber()" value="Enviar">-->
+           
+                <label><span>
+                        
+                        <h3 id="inicio"></h3>
+
+                <label for="dataF">
+                    <h4>Data do fim:</h4>
+                </label>
+                <input type="date" name="dataF" id="dataF" class="dataF" data-list-dataf >
+                <!-- <input type="submit" onclick="receber()" value="Enviar">-->
+               
+                <label><span>
+                        
+                        <h3 id="fim"></h3>
+                
+                    <h4>Investimento:</h4>
+                
+                <input type="number" name="grana" id="grana" class="grana"data-list-grana >
+                <!-- <input type="submit" onclick="receber()" value="Enviar">-->
+                <input type="button" onclick="render()" value="Enviar" qtd1>
+                <label><span>
+                        
+                  
+                <h3 id="exporAnuncio"></h3>
+
+
+            </fieldset>
+
+        </form>
+
+
+
+
+
+        <form action="#" method="GET">
+            <fieldset>
+                <legend>
+                    <h2>Investimento</h2>
+                </legend>
+
+                <label for="investA">
+                    <h4>Quanto pretende investir em divulgação dos sites?</h4>
+                </label>
+                <input type="number" name="investimento" id="investA" class="investA">
+                <!-- <input type="submit" onclick="receber()" value="Enviar">-->
+                <input type="reset" onclick="chamada()" value="Enviar">
+                <label><span>
+                        
+                    </span></label>
+
+                <h3 id="valorDigitado"></h3>
+
+               
+            </fieldset>
+
+        </form>
+
+    </section>
+
+
+    <footer class="rodape" id="rodape">
+        <h2>@jacquelinepslima</h2>
+    <script src="script.js"></script>
+  </body>
+</html>
