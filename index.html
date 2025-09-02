@@ -3,32 +3,32 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>Calculadora de anúncio</title>
-    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <title>Advertisement Calculator</title>
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <body class="container">
+    <div class="container">
     <header class="cabeca " id="cabeca">
-        <h1>Controle de Anúncios</h1>
+        <h1>Advertisement Control</h1>
         
     </header>
     <nav class="navegar" id="navegar">
         <ul class="ol " >
-            <li> <a href="#">Página inicial</a></li>
-            <li><a href="#all" >Cadastro</a></li>
+            <li> <a href="#">Home</a></li>
+            <li><a href="#all" >Register</a></li>
         </ul>
 
     </nav>
     <aside class="aside" id="aside">
             <dl>
-            <dt><h4>Como cadastrar meu anúncio?</h4></dt>
+            <dt><h4>How to register my advertisement?</h4></dt>
             <br>
-            <dd>Nesta página você poderá inserir os valores do anúncio no formulário, o sistema irá armazenar as informações para serem verificadas.
+            <dd>On this page you can insert the advertisement values in the form, the system will store the information for verification.
             </dd>
             <br>
-            <dt><h4>Como vou ter o retorno de visualizações conforme o valor investido?</h4></dt>
+            <dt><h4>How will I get the return of views according to the invested value?</h4></dt>
             <br>
-            <dd>No último campo do formulário voce poderá inserir o valor do investimento e o sistema retornará a quantidade total de visualizações.
+            <dd>In the last field of the form you can insert the investment value and the system will return the total number of views.
             </dd>
             </dl>
 
@@ -37,60 +37,60 @@
         <form action="script.js" method="GET" id="all" class="all" all>
             <fieldset>
               
-                    <h2>Cadastro de Anúncios</h2>
-                   <label for="qtd"> <h3>Quantos anúncios deseja cadastrar? </h3></label>
+                    <h2>Advertisement Registration</h2>
+                   <label for="qtd"> <h3>How many advertisements do you want to register? </h3></label>
                    <input type="tel" name="qtd" id="qtd" class="qtd" qtd>
-                   <input type="button" onclick="render()" value="Enviar">
+                   <input type="button" onclick="render()" value="Send">
                    <label><span>
                    
                    <h3 id="exporAnuncio"></h3>
                 
 
                 <label for="nome">
-                    <h4>Nome do anúncio:</h4>
+                    <h4>Advertisement name:</h4>
                 </label>
                 <input type="tel" name="anuncio" id="nome" class="nome" data-list-nome >
-                <!-- <input type="submit" onclick="receber()" value="Enviar">-->
+                <!-- <input type="submit" onclick="receber()" value="Send">-->
                
                 <label><span>
           
                     <h3 id="anunciar" anunciar></h3>
 
                 <label for="nome">
-                    <h4>Nome do cliente:</h4>
+                    <h4>Client name:</h4>
                 </label>
                 <input type="tel" name="nome" id="nome" class="nome" data-list-nome >
-                <!-- <input type="submit" onclick="receber()" value="Enviar">-->
+                <!-- <input type="submit" onclick="receber()" value="Send">-->
                 
                 <label><span>
                         
                     <h3 id="nomeR"></h3>
 
                 <label for="dataI">
-                    <h4>Data de inicio:</h4>
+                    <h4>Start date:</h4>
                 </label>
                 <input type="date" name="dataI" id="dataI" class="dataI" data-list-dataI >
-                <!-- <input type="submit" onclick="receber()" value="Enviar">-->
+                <!-- <input type="submit" onclick="receber()" value="Send">-->
            
                 <label><span>
                         
                         <h3 id="inicio"></h3>
 
                 <label for="dataF">
-                    <h4>Data do fim:</h4>
+                    <h4>End date:</h4>
                 </label>
                 <input type="date" name="dataF" id="dataF" class="dataF" data-list-dataf >
-                <!-- <input type="submit" onclick="receber()" value="Enviar">-->
+                <!-- <input type="submit" onclick="receber()" value="Send">-->
                
                 <label><span>
                         
                         <h3 id="fim"></h3>
                 
-                    <h4>Investimento:</h4>
+                    <h4>Investment:</h4>
                 
                 <input type="number" name="grana" id="grana" class="grana"data-list-grana >
-                <!-- <input type="submit" onclick="receber()" value="Enviar">-->
-                <input type="button" onclick="render()" value="Enviar" qtd1>
+                <!-- <input type="submit" onclick="receber()" value="Send">-->
+                <input type="button" onclick="render()" value="Send" qtd1>
                 <label><span>
                         
                   
@@ -104,19 +104,18 @@
 
 
 
-
         <form action="#" method="GET">
             <fieldset>
                 <legend>
-                    <h2>Investimento</h2>
+                    <h2>Investment</h2>
                 </legend>
 
                 <label for="investA">
-                    <h4>Quanto pretende investir em divulgação dos sites?</h4>
+                    <h4>How much do you plan to invest in website promotion?</h4>
                 </label>
                 <input type="number" name="investimento" id="investA" class="investA">
-                <!-- <input type="submit" onclick="receber()" value="Enviar">-->
-                <input type="reset" onclick="chamada()" value="Enviar">
+                <!-- <input type="submit" onclick="chamada()" value="Send">-->
+                <input type="reset" onclick="chamada()" value="Send">
                 <label><span>
                         
                     </span></label>
@@ -128,11 +127,67 @@
 
         </form>
 
+        <!-- Campaign Metrics Dashboard -->
+        <div class="dashboard" id="dashboard">
+            <h2>Campaign Dashboard</h2>
+            
+            <!-- General Metrics -->
+            <div class="metrics-overview">
+                <div class="metric-card">
+                    <h3>Total Campaigns</h3>
+                    <div class="metric-value" id="totalCampanhas">0</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Total Invested</h3>
+                    <div class="metric-value" id="totalInvestido">$0.00</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Total Views</h3>
+                    <div class="metric-value" id="totalVisualizacoes">0</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Average ROI</h3>
+                    <div class="metric-value" id="mediaROI">0%</div>
+                </div>
+            </div>
+
+            <!-- Campaign List with Metrics -->
+            <div class="campaigns-list">
+                <!-- Search Field -->
+                <div class="search-container">
+                    <input type="text" id="buscaCampanhas" placeholder="Search campaigns by name or client..." class="search-input">
+                    <button onclick="buscarCampanhas(document.getElementById('buscaCampanhas').value)" class="search-button">
+                        Search
+                    </button>
+                </div>
+                
+                <h3>Active Campaigns</h3>
+                <div id="campanhasAtivas"></div>
+                
+                <h3>Finished Campaigns</h3>
+                <div id="campanhasFinalizadas"></div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="dashboard-actions">
+                <button onclick="exportData()" class="btn-action">Export Data</button>
+                <button onclick="generateReport()" class="btn-action">Generate Report</button>
+                <button onclick="clearData()" class="btn-action btn-danger">Clear Data</button>
+            </div>
+        </div>
+
     </section>
 
 
     <footer class="rodape" id="rodape">
         <h2>@jacquelinepslima</h2>
-    <script src="script.js"></script>
+    </div>
+    <!-- Application Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="data/mockData.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/campaign.js"></script>
+    <script src="js/metrics.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>
