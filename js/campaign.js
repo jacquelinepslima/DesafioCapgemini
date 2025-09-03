@@ -9,19 +9,19 @@ class Campaign {
     }
 
     calculateViews() {
-        // Calculation based on investment
-        const viewsPerCurrency = this.investment * 30;
-        const clicks = viewsPerCurrency * 0.12;
+        // Original algorithm from your Portuguese code
+        const peoplePerCurrency = this.investment * 30;
+        const clicks = peoplePerCurrency * 0.12;
         const shares = clicks * (3 / 20);
         const additionalViews = shares * 40;
-        const totalViewed = viewsPerCurrency + additionalViews;
-
+        const totalViewed = peoplePerCurrency + additionalViews;
+        
         return {
-            viewsPerCurrency,
-            clicks,
-            shares,
-            additionalViews,
-            totalViewed
+            viewsPerCurrency: Math.round(peoplePerCurrency),
+            clicks: Math.round(clicks),
+            shares: Math.round(shares),
+            additionalViews: Math.round(additionalViews),
+            totalViewed: Math.round(totalViewed)
         };
     }
 
@@ -37,7 +37,7 @@ class Campaign {
     }
 }
 
-// Campaign Manager
+// Campaign Manager (based on your original code)
 class CampaignManager {
     constructor() {
         this.campaigns = [];
@@ -45,13 +45,13 @@ class CampaignManager {
     }
 
     addCampaign(name, client, startDate, endDate, investment) {
-        // Validate data before creating the campaign
+        // Validate data before creating campaign
         const errors = validateCampaignData(name, client, startDate, endDate, investment);
-
+        
         if (errors.length > 0) {
             throw new Error(`Validation errors: ${errors.join(', ')}`);
         }
-
+        
         const campaign = new Campaign(name, client, startDate, endDate, investment);
         this.campaigns.push(campaign);
         this.saveToStorage();
@@ -87,58 +87,22 @@ class CampaignManager {
     }
 
     loadFromStorage() {
-        this.campaigns = DataManager.loadCampaigns();
+        const data = DataManager.loadCampaigns();
+        this.campaigns = data.map(campaignData => {
+            const campaign = new Campaign(
+                campaignData.name,
+                campaignData.client, 
+                campaignData.startDate,
+                campaignData.endDate,
+                campaignData.investment
+            );
+            campaign.id = campaignData.id;
+            return campaign;
+        });
     }
 }
 
-// Global manager instance
-const campaignManager = new CampaignManager();
-
-// Campaign validation function
-function validateCampaign(campaign) {
-    const errors = [];
-
-    if (!campaign.name || campaign.name.trim() === '') {
-        errors.push('Campaign name is required');
-    }
-
-    if (!campaign.client || campaign.client.trim() === '') {
-        errors.push('Client name is required');
-    }
-
-    if (!campaign.startDate) {
-        errors.push('Start date is required');
-    }
-
-    if (!campaign.endDate) {
-        errors.push('End date is required');
-    }
-
-    if (campaign.startDate && campaign.endDate) {
-        const start = new Date(campaign.startDate);
-        const end = new Date(campaign.endDate);
-
-        if (start >= end) {
-            errors.push('End date must be after start date');
-        }
-
-        if (start < new Date()) {
-            errors.push('Start date cannot be in the past');
-        }
-    }
-
-    if (!campaign.investment || campaign.investment <= 0) {
-        errors.push('Investment must be greater than zero');
-    }
-
-    if (campaign.investment > 1000000) {
-        errors.push('Investment cannot exceed $1,000,000.00');
-    }
-
-    return errors;
-}
-
-// Validate data before creating campaign
+// Validation function (translated from your original)
 function validateCampaignData(name, client, startDate, endDate, investment) {
     const campaignData = {
         name: name,
@@ -147,6 +111,48 @@ function validateCampaignData(name, client, startDate, endDate, investment) {
         endDate: endDate,
         investment: parseFloat(investment)
     };
-
+    
     return validateCampaign(campaignData);
 }
+
+function validateCampaign(campaign) {
+    const errors = [];
+    
+    if (!campaign.name || campaign.name.trim() === '') {
+        errors.push('Campaign name is required');
+    }
+    
+    if (!campaign.client || campaign.client.trim() === '') {
+        errors.push('Client name is required');
+    }
+    
+    if (!campaign.startDate) {
+        errors.push('Start date is required');
+    }
+    
+    if (!campaign.endDate) {
+        errors.push('End date is required');
+    }
+    
+    if (campaign.startDate && campaign.endDate) {
+        const start = new Date(campaign.startDate);
+        const end = new Date(campaign.endDate);
+        
+        if (start >= end) {
+            errors.push('End date must be after start date');
+        }
+    }
+    
+    if (!campaign.investment || campaign.investment <= 0) {
+        errors.push('Investment must be greater than zero');
+    }
+    
+    if (campaign.investment > 1000000) {
+        errors.push('Investment cannot exceed $1,000,000.00');
+    }
+    
+    return errors;
+}
+
+// Global instance
+const campaignManager = new CampaignManager();

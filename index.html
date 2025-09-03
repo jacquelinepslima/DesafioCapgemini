@@ -1,133 +1,108 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Advertisement Calculator</title>
-    <meta name="description" content="Advertisement campaign management dashboard">
-    <link href="css/styles.css" rel="stylesheet" type="text/css">
-  </head>
-  <body>
-    <div class="container">
-      <header class="header" id="header">
-        <h1>Advertisement Control</h1>
-      </header>
-      <nav class="navigation" id="navigation">
-        <ul class="menu">
-          <li><a href="#">Home</a></li>
-          <li><a href="#registration">Register</a></li>
-        </ul>
-      </nav>
-      <aside class="sidebar" id="sidebar">
-        <dl>
-          <dt><h4>How do I register my advertisement?</h4></dt>
-          <dd>
-            On this page, you can enter the values for your advertisement in the form. The system will store the information for verification.
-          </dd>
-          <dt><h4>How will I receive the number of views according to the invested amount?</h4></dt>
-          <dd>
-            In the last field of the form, you can enter the investment amount and the system will return the total number of views.
-          </dd>
-        </dl>
-      </aside>
-      <section class="section" id="section">
-        <form action="script.js" method="GET" id="registration" class="registration-form">
-          <fieldset>
-            <h2>Advertisement Registration</h2>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advertisement Calculator</title>
+  <meta name="description" content="Advertisement campaign management dashboard">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header" id="header">
+      <h1>Advertisement Control</h1>
+    </header>
 
-            <label for="numAds"><h3>How many advertisements do you want to register?</h3></label>
-            <input type="number" name="numAds" id="numAds" class="num-ads" placeholder="Enter quantity">
+    <nav class="navigation" id="navigation">
+      <ul class="menu">
+        <li><a href="#">Home</a></li>
+        <li><a href="#registrationForm">Register</a></li>
+      </ul>
+    </nav>
 
-            <input type="button" onclick="render()" value="Send">
+    <aside class="sidebar" id="sidebar">
+      <dl>
+        <dt><h4>How do I register my advertisement?</h4></dt>
+        <dd>Enter your ad info in the form. The system will store it for verification.</dd>
+        <dt><h4>How will I receive the number of views?</h4></dt>
+        <dd>Enter the investment amount, and the system will calculate total views.</dd>
+      </dl>
+    </aside>
 
-            <h3 id="showAd"></h3>
+    <section class="section" id="section">
 
-            <label for="adName"><h4>Advertisement Name:</h4></label>
-            <input type="text" name="adName" id="adName" class="ad-name" data-list-ad-name placeholder="Advertisement name">
+      <!-- Advertisement Registration Form -->
+      <form id="registrationForm" class="registration-form">
+        <fieldset>
+          <h2>Advertisement Registration</h2>
 
-            <label for="clientName"><h4>Client Name:</h4></label>
-            <input type="text" name="clientName" id="clientName" class="client-name" data-list-client-name placeholder="Client name">
+          <label for="numAds"><h3>How many advertisements do you want to register?</h3></label>
+          <input type="number" name="numAds" id="numAds" placeholder="Enter quantity">
 
-            <label for="startDate"><h4>Start Date:</h4></label>
-            <input type="date" name="startDate" id="startDate" class="start-date" data-list-start-date>
+          <label for="adName"><h4>Advertisement Name:</h4></label>
+          <input type="text" name="adName" id="adName" placeholder="Advertisement name">
 
-            <label for="endDate"><h4>End Date:</h4></label>
-            <input type="date" name="endDate" id="endDate" class="end-date" data-list-end-date>
+          <label for="clientName"><h4>Client Name:</h4></label>
+          <input type="text" name="clientName" id="clientName" placeholder="Client name">
 
-            <label for="investment"><h4>Investment:</h4></label>
-            <input type="number" name="investment" id="investment" class="investment" data-list-investment placeholder="Amount">
+          <label for="startDate"><h4>Start Date:</h4></label>
+          <input type="date" name="startDate" id="startDate">
 
-            <input type="button" onclick="render()" value="Send">
+          <label for="endDate"><h4>End Date:</h4></label>
+          <input type="date" name="endDate" id="endDate">
 
-            <h3 id="announce"></h3>
-            <h3 id="clientResult"></h3>
-            <h3 id="startResult"></h3>
-            <h3 id="endResult"></h3>
-            <h3 id="showAd"></h3>
-          </fieldset>
-        </form>
+          <label for="investment"><h4>Investment:</h4></label>
+          <input type="number" name="investment" id="investment" placeholder="Amount">
 
-        <form action="#" method="GET">
-          <fieldset>
-            <legend><h2>Investment</h2></legend>
-            <label for="promotionInvestment"><h4>How much do you plan to invest in website promotion?</h4></label>
-            <input type="number" name="promotionInvestment" id="promotionInvestment" class="promotion-investment" placeholder="Investment amount">
-            <input type="reset" onclick="callFunction()" value="Send">
-            <h3 id="enteredValue"></h3>
-          </fieldset>
-        </form>
+          <button type="submit">Register</button>
+          <div id="campaignOutput"></div>
+        </fieldset>
+      </form>
 
-        <!-- Campaign Metrics Dashboard -->
-        <div class="dashboard" id="dashboard">
-          <h2>Campaign Dashboard</h2>
-          <!-- General Metrics -->
-          <div class="metrics-overview">
-            <div class="metric-card">
-              <h3>Total Campaigns</h3>
-              <div class="metric-value" id="totalCampaigns">0</div>
-            </div>
-            <div class="metric-card">
-              <h3>Total Invested</h3>
-              <div class="metric-value" id="totalInvested">$0.00</div>
-            </div>
-            <div class="metric-card">
-              <h3>Total Views</h3>
-              <div class="metric-value" id="totalViews">0</div>
-            </div>
-            <div class="metric-card">
-              <h3>Average ROI</h3>
-              <div class="metric-value" id="averageROI">0%</div>
-            </div>
-          </div>
-          <!-- Campaign List with Metrics -->
-          <div class="campaigns-list">
-            <div class="search-container">
-              <input type="text" id="searchCampaigns" placeholder="Search campaigns by name or client..." class="search-input">
-              <button type="button" onclick="searchCampaigns(document.getElementById('searchCampaigns').value)" class="search-button">Search</button>
-            </div>
-            <h3>Active Campaigns</h3>
-            <div id="activeCampaigns"></div>
-            <h3>Finished Campaigns</h3>
-            <div id="finishedCampaigns"></div>
-          </div>
-          <!-- Action Buttons -->
-          <div class="dashboard-actions">
-            <button type="button" onclick="exportData()" class="btn-action">Export Data</button>
-            <button type="button" onclick="generateReport()" class="btn-action">Generate Report</button>
-            <button type="button" onclick="clearData()" class="btn-action btn-danger">Clear Data</button>
-          </div>
+      <!-- Investment Form -->
+      <form id="investmentForm">
+        <fieldset>
+          <legend><h2>Investment</h2></legend>
+          <label for="promotionInvestment"><h4>Investment amount:</h4></label>
+          <input type="number" name="promotionInvestment" id="promotionInvestment" placeholder="Investment">
+          <button type="button" id="calculateInvestment">Send</button>
+          <div id="investmentOutput"></div>
+        </fieldset>
+      </form>
+
+      <!-- Campaign Dashboard -->
+      <div class="dashboard" id="dashboard">
+        <h2>Campaign Dashboard</h2>
+        <div class="metrics-overview">
+          <div class="metric-card"><h3>Total Campaigns</h3><div id="totalCampaigns">0</div></div>
+          <div class="metric-card"><h3>Total Invested</h3><div id="totalInvested">$0.00</div></div>
+          <div class="metric-card"><h3>Total Views</h3><div id="totalViews">0</div></div>
+          <div class="metric-card"><h3>Average ROI</h3><div id="averageROI">0%</div></div>
         </div>
-      </section>
-      <footer class="footer" id="footer">
-        <h2>@jacquelinepslima</h2>
-      </footer>
-    </div>
-    <!-- Application Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="data/mockData.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/campaign.js"></script>
-    <script src="js/metrics.js"></script>
-    <script src="js/main.js"></script>
-  </body>
+
+        <div class="campaigns-list">
+          <div class="search-container">
+            <input type="text" id="searchCampaigns" placeholder="Search campaigns by name or client">
+          </div>
+          <h3>Active Campaigns</h3>
+          <div id="activeCampaigns"></div>
+          <h3>Finished Campaigns</h3>
+          <div id="finishedCampaigns"></div>
+        </div>
+
+        <div class="dashboard-actions">
+          <button type="button" id="exportDataBtn">Export Data</button>
+          <input type="file" id="importDataInput" accept=".json">
+          <button type="button" id="backupBtn">Backup</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer" id="footer">
+      <h2>@jacquelinepslima</h2>
+    </footer>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
 </html>
