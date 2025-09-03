@@ -1,39 +1,41 @@
+/* ===== MAIN LAYOUT ===== */
 body {
-  margin:0px 0px 30px 0px;
-  font-family:Arial, Helvetica, sans-serif;
+  margin: 0 0 30px 0;
+  font-family: Arial, Helvetica, sans-serif;
   font-size-adjust: inherit;
-  text-align:center;
+  text-align: center;
 }
 
-/* ===== LAYOUT PRINCIPAL ===== */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
-section{
-  width:60%;
-  margin:0 auto;
+section {
+  width: 60%;
+  margin: 0 auto;
 }
 
+/* ===== HEADINGS ===== */
 h2 {
-  background-color:blueviolet;
+  background-color: blueviolet;
 }
 
-ul{
+/* ===== LIST STYLES ===== */
+ul {
   list-style-type: none;
   line-height: 2;
   padding-left: 0;
 }
 
-.principal li{
-  display:inline-block;
+.main-list li {
+  display: inline-block;
   line-height: 2.5;
-  margin:0 100px;
+  margin: 0 100px;
 }
 
-/* ===== ESTILOS PARA MENSAGENS ===== */
+/* ===== MESSAGE STYLES ===== */
 .message {
   padding: 10px;
   margin: 10px 0;
@@ -65,7 +67,7 @@ ul{
   color: #0c5460;
 }
 
-/* ===== ESTILOS PARA FORMULÁRIOS ===== */
+/* ===== FORM STYLES ===== */
 form {
   margin: 20px 0;
   padding: 20px;
@@ -113,7 +115,7 @@ input[type="reset"]:hover {
   background-color: #0056b3;
 }
 
-/* ===== ESTILOS PARA VALIDAÇÃO DE CAMPOS ===== */
+/* ===== FIELD VALIDATION STYLES ===== */
 .error-field {
   border-color: #dc3545 !important;
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
@@ -131,7 +133,7 @@ input[type="reset"]:hover {
   font-weight: 500;
 }
 
-/* ===== ANIMAÇÕES PARA CAMPOS DE VALIDAÇÃO ===== */
+/* ===== FIELD ANIMATION ===== */
 input:focus {
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
@@ -146,7 +148,7 @@ input:focus {
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }
 
-/* ===== ESTILOS PARA O DASHBOARD ===== */
+/* ===== DASHBOARD STYLES ===== */
 .dashboard {
   margin: 30px 0;
   padding: 20px;
@@ -197,6 +199,7 @@ input:focus {
   color: white;
 }
 
+/* ===== CAMPAIGN LIST STYLES ===== */
 .campaigns-list {
   margin: 30px 0;
 }
@@ -235,17 +238,17 @@ input:focus {
   font-weight: bold;
 }
 
-.status-ativa {
+.status-active {
   background: #28a745;
   color: white;
 }
 
-.status-finalizada {
+.status-finished {
   background: #6c757d;
   color: white;
 }
 
-.status-agendada {
+.status-scheduled {
   background: #ffc107;
   color: #212529;
 }
@@ -276,6 +279,7 @@ input:focus {
   color: white;
 }
 
+/* ===== DASHBOARD ACTIONS ===== */
 .dashboard-actions {
   display: flex;
   gap: 15px;
@@ -311,7 +315,7 @@ input:focus {
   background: rgba(220, 53, 69, 1);
 }
 
-/* ===== ESTILOS PARA CAMPO DE BUSCA ===== */
+/* ===== SEARCH FIELD STYLES ===== */
 .search-container {
   margin-bottom: 20px;
   text-align: center;
@@ -354,8 +358,8 @@ input:focus {
   transform: translateY(-2px);
 }
 
-/* ===== ESTILOS PARA MODAL DE RELATÓRIO ===== */
-.modal-relatorio {
+/* ===== REPORT MODAL STYLES ===== */
+.modal-report {
   position: fixed;
   top: 0;
   left: 0;
@@ -464,7 +468,7 @@ input:focus {
   transform: translateY(-2px);
 }
 
-/* ===== ESTILOS PARA CAMPANHAS ===== */
+/* ===== CAMPAIGN CARD ===== */
 .campaign-card {
   background: #fff;
   border-radius: 8px;
@@ -473,69 +477,56 @@ input:focus {
   margin-bottom: 20px;
 }
 
-/* ===== LAYOUT RESPONSIVO ===== */
+/* ===== RESPONSIVE LAYOUT ===== */
 @media (max-width: 768px) {
   .container {
     padding: 10px;
   }
-  
   section {
     width: 90%;
   }
-  
-  .principal li {
+  .main-list li {
     margin: 0 20px;
   }
-  
   .field-error {
     font-size: 0.8rem;
   }
-  
   .metrics-overview {
     grid-template-columns: 1fr;
     gap: 15px;
   }
-  
   .campaign-metrics {
     grid-template-columns: repeat(2, 1fr);
   }
-  
   .dashboard-actions {
     flex-direction: column;
     align-items: center;
   }
-  
   .btn-action {
     width: 100%;
     max-width: 300px;
   }
-  
   .search-input {
     width: 100%;
     max-width: 300px;
   }
-  
   .search-button {
     margin-left: 0;
     margin-top: 10px;
     width: 100%;
     max-width: 300px;
   }
-  
   .charts-grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
   .modal-content {
     padding: 20px;
     margin: 10px;
   }
-  
   .modal-title {
     font-size: 1.5rem;
   }
-  
   .btn-export,
   .btn-print {
     display: block;
@@ -548,27 +539,21 @@ input:focus {
   .container {
     padding: 5px;
   }
-  
   section {
     width: 95%;
   }
-  
   .dashboard {
     padding: 15px;
   }
-  
   .metric-card {
     padding: 15px;
   }
-  
   .metric-value {
     font-size: 1.5rem;
   }
-  
   .campaign-item {
     padding: 10px;
   }
-  
   .campaign-metrics {
     grid-template-columns: 1fr;
   }

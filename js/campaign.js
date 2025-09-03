@@ -1,85 +1,84 @@
-// Gerenciamento de Campanhas de Anúncios
 class Campaign {
-    constructor(nome, cliente, dataInicio, dataFim, investimento) {
-        this.nome = nome;
-        this.cliente = cliente;
-        this.dataInicio = dataInicio;
-        this.dataFim = dataFim;
-        this.investimento = parseFloat(investimento);
+    constructor(name, client, startDate, endDate, investment) {
+        this.name = name;
+        this.client = client;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.investment = parseFloat(investment);
         this.id = Date.now() + Math.random();
     }
 
-    calcularVisualizacoes() {
-        // Cálculo baseado no investimento
-        const pessoasPorReal = this.investimento * 30;
-        const clicam = pessoasPorReal * 0.12;
-        const compartilham = clicam * (3 / 20);
-        const visualiza = compartilham * 40;
-        const totalVisualizado = pessoasPorReal + visualiza;
-        
+    calculateViews() {
+        // Calculation based on investment
+        const viewsPerCurrency = this.investment * 30;
+        const clicks = viewsPerCurrency * 0.12;
+        const shares = clicks * (3 / 20);
+        const additionalViews = shares * 40;
+        const totalViewed = viewsPerCurrency + additionalViews;
+
         return {
-            pessoasPorReal,
-            clicam,
-            compartilham,
-            visualiza,
-            totalVisualizado
+            viewsPerCurrency,
+            clicks,
+            shares,
+            additionalViews,
+            totalViewed
         };
     }
 
     toJSON() {
         return {
             id: this.id,
-            nome: this.nome,
-            cliente: this.cliente,
-            dataInicio: this.dataInicio,
-            dataFim: this.dataFim,
-            investimento: this.investimento
+            name: this.name,
+            client: this.client,
+            startDate: this.startDate,
+            endDate: this.endDate,
+            investment: this.investment
         };
     }
 }
 
-// Gerenciador de Campanhas
+// Campaign Manager
 class CampaignManager {
     constructor() {
         this.campaigns = [];
         this.loadFromStorage();
     }
 
-    adicionarCampanha(nome, cliente, dataInicio, dataFim, investimento) {
-        // Valida os dados antes de criar a campanha
-        const errors = validateCampaignData(nome, cliente, dataInicio, dataFim, investimento);
-        
+    addCampaign(name, client, startDate, endDate, investment) {
+        // Validate data before creating the campaign
+        const errors = validateCampaignData(name, client, startDate, endDate, investment);
+
         if (errors.length > 0) {
-            throw new Error(`Erros de validação: ${errors.join(', ')}`);
+            throw new Error(`Validation errors: ${errors.join(', ')}`);
         }
-        
-        const campanha = new Campaign(nome, cliente, dataInicio, dataFim, investimento);
-        this.campaigns.push(campanha);
+
+        const campaign = new Campaign(name, client, startDate, endDate, investment);
+        this.campaigns.push(campaign);
         this.saveToStorage();
-        return campanha;
+        return campaign;
     }
 
-    removerCampanha(id) {
+    removeCampaign(id) {
         this.campaigns = this.campaigns.filter(camp => camp.id !== id);
         this.saveToStorage();
     }
 
-    buscarCampanha(id) {
+    findCampaign(id) {
         return this.campaigns.find(camp => camp.id === id);
     }
 
-    listarCampanhas() {
+    listCampaigns() {
         return this.campaigns;
     }
 
-    calcularTotalInvestido() {
-        return this.campaigns.reduce((total, camp) => total + camp.investimento, 0);
+    getTotalInvestment() {
+        return this.campaigns.reduce((total, camp) => total + camp.investment, 0);
     }
 
-    calcularTotalVisualizacoes() {
+    getTotalViews() {
         return this.campaigns.reduce((total, camp) => {
-            const calc = camp.calcularVisualizacoes();
-            return total + calc.totalVisualizado;
+            const calc = camp.calculateViews();
+            return total + calc.totalViewed;
         }, 0);
     }
 
@@ -92,62 +91,62 @@ class CampaignManager {
     }
 }
 
-// Instância global do gerenciador
+// Global manager instance
 const campaignManager = new CampaignManager();
 
 // Campaign validation function
 function validateCampaign(campaign) {
     const errors = [];
-    
-    if (!campaign.nome || campaign.nome.trim() === '') {
+
+    if (!campaign.name || campaign.name.trim() === '') {
         errors.push('Campaign name is required');
     }
-    
-    if (!campaign.cliente || campaign.cliente.trim() === '') {
+
+    if (!campaign.client || campaign.client.trim() === '') {
         errors.push('Client name is required');
     }
-    
-    if (!campaign.dataInicio) {
+
+    if (!campaign.startDate) {
         errors.push('Start date is required');
     }
-    
-    if (!campaign.dataFim) {
+
+    if (!campaign.endDate) {
         errors.push('End date is required');
     }
-    
-    if (campaign.dataInicio && campaign.dataFim) {
-        const inicio = new Date(campaign.dataInicio);
-        const fim = new Date(campaign.dataFim);
-        
-        if (inicio >= fim) {
+
+    if (campaign.startDate && campaign.endDate) {
+        const start = new Date(campaign.startDate);
+        const end = new Date(campaign.endDate);
+
+        if (start >= end) {
             errors.push('End date must be after start date');
         }
-        
-        if (inicio < new Date()) {
+
+        if (start < new Date()) {
             errors.push('Start date cannot be in the past');
         }
     }
-    
-    if (!campaign.investimento || campaign.investimento <= 0) {
+
+    if (!campaign.investment || campaign.investment <= 0) {
         errors.push('Investment must be greater than zero');
     }
-    
-    if (campaign.investimento > 1000000) {
+
+    if (campaign.investment > 1000000) {
         errors.push('Investment cannot exceed $1,000,000.00');
     }
-    
+
     return errors;
 }
 
-// Function to validate data before creating campaign
-function validateCampaignData(nome, cliente, dataInicio, dataFim, investimento) {
+// Validate data before creating campaign
+function validateCampaignData(name, client, startDate, endDate, investment) {
     const campaignData = {
-        nome: nome,
-        cliente: cliente,
-        dataInicio: dataInicio,
-        dataFim: dataFim,
-        investimento: parseFloat(investimento)
+        name: name,
+        client: client,
+        startDate: startDate,
+        endDate: endDate,
+        investment: parseFloat(investment)
     };
-    
+
     return validateCampaign(campaignData);
 }

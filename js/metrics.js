@@ -1,269 +1,225 @@
-// Calculadora de Métricas para Campanhas de Anúncios
+// Metrics Calculator for Advertisement Campaigns
 class MetricsCalculator {
-    // Calcula o ROI (Return on Investment)
+    // Default configuration (customize as needed)
+    static config = {
+        conversionRate: 0.05,         // 5% conversion rate
+        averageOrderValue: 150.00,    // $150 average order value
+    };
+
+    // Helper for rounding numbers
+    static round(value, decimals = 2) {
+        return Number.isFinite(value)
+            ? Math.round(value * Math.pow(10, decimals)) / Math.pow(10, decimals)
+            : 0;
+    }
+
+    // Calculate ROI (Return on Investment)
     static calculateROI(campaign) {
-        if (!campaign.investimento || campaign.investimento <= 0) {
-            return 0;
-        }
-        
-        // Simula receita baseada em cliques e taxa de conversão
-        const clicks = campaign.calcularVisualizacoes().clicam;
-        const conversionRate = 0.05; // 5% de taxa de conversão padrão
-        const averageOrderValue = 150.00; // Valor médio do pedido
-        
+        if (!campaign.investment || campaign.investment <= 0) return 0;
+        const metrics = campaign.calculateViews ? campaign.calculateViews() : {};
+        const clicks = metrics.clicks ?? 0;
+        const { conversionRate, averageOrderValue } = MetricsCalculator.config;
         const revenue = clicks * conversionRate * averageOrderValue;
-        const roi = ((revenue - campaign.investimento) / campaign.investimento) * 100;
-        
-        return Math.round(roi * 100) / 100; // Arredonda para 2 casas decimais
+        const roi = ((revenue - campaign.investment) / campaign.investment) * 100;
+        return MetricsCalculator.round(roi);
     }
-    
-    // Calcula o CTR (Click Through Rate)
+
+    // Calculate CTR (Click Through Rate)
     static calculateCTR(campaign) {
-        const visualizacoes = campaign.calcularVisualizacoes().pessoasPorReal;
-        const cliques = campaign.calcularVisualizacoes().clicam;
-        
-        if (visualizacoes <= 0) {
-            return 0;
-        }
-        
-        return Math.round((cliques / visualizacoes) * 100 * 100) / 100;
+        const metrics = campaign.calculateViews ? campaign.calculateViews() : {};
+        const views = metrics.viewsPerCurrency ?? 0;
+        const clicks = metrics.clicks ?? 0;
+        if (views <= 0) return 0;
+        return MetricsCalculator.round((clicks / views) * 100);
     }
-    
-    // Calcula o CPC (Cost Per Click)
+
+    // Calculate CPC (Cost Per Click)
     static calculateCPC(campaign) {
-        const cliques = campaign.calcularVisualizacoes().clicam;
-        
-        if (cliques <= 0) {
-            return 0;
-        }
-        
-        return Math.round((campaign.investimento / cliques) * 100) / 100;
+        const metrics = campaign.calculateViews ? campaign.calculateViews() : {};
+        const clicks = metrics.clicks ?? 0;
+        if (clicks <= 0) return 0;
+        return MetricsCalculator.round(campaign.investment / clicks);
     }
-    
-    // Calcula o CPM (Cost Per Mille - custo por mil impressões)
+
+    // Calculate CPM (Cost Per Mille)
     static calculateCPM(campaign) {
-        const visualizacoes = campaign.calcularVisualizacoes().pessoasPorReal;
-        
-        if (visualizacoes <= 0) {
-            return 0;
-        }
-        
-        return Math.round((campaign.investimento / visualizacoes) * 1000 * 100) / 100;
+        const metrics = campaign.calculateViews ? campaign.calculateViews() : {};
+        const views = metrics.viewsPerCurrency ?? 0;
+        if (views <= 0) return 0;
+        return MetricsCalculator.round((campaign.investment / views) * 1000);
     }
-    
-    // Calcula a taxa de compartilhamento
+
+    // Calculate Share Rate
     static calculateShareRate(campaign) {
-        const cliques = campaign.calcularVisualizacoes().clicam;
-        const compartilhamentos = campaign.calcularVisualizacoes().compartilham;
-        
-        if (cliques <= 0) {
-            return 0;
-        }
-        
-        return Math.round((compartilhamentos / cliques) * 100 * 100) / 100;
+        const metrics = campaign.calculateViews ? campaign.calculateViews() : {};
+        const clicks = metrics.clicks ?? 0;
+        const shares = metrics.shares ?? 0;
+        if (clicks <= 0) return 0;
+        return MetricsCalculator.round((shares / clicks) * 100);
     }
-    
-    // Calcula o alcance total (visualizações + visualizações por compartilhamento)
+
+    // Calculate Total Reach
     static calculateTotalReach(campaign) {
-        const metricas = campaign.calcularVisualizacoes();
-        return metricas.pessoasPorReal + metricas.visualiza;
+        const metrics = campaign.calculateViews ? campaign.calculateViews() : {};
+        return (metrics.viewsPerCurrency ?? 0) + (metrics.additionalViews ?? 0);
     }
-    
-    // Calcula a eficiência da campanha (score de 0-100)
+
+    // Calculate Campaign Efficiency (score 0-100)
     static calculateCampaignEfficiency(campaign) {
         let score = 0;
-        
-        // Pontuação baseada no ROI
         const roi = this.calculateROI(campaign);
         if (roi > 0) score += 30;
         else if (roi > -50) score += 15;
-        
-        // Pontuação baseada no CTR
+
         const ctr = this.calculateCTR(campaign);
         if (ctr > 2) score += 25;
         else if (ctr > 1) score += 15;
         else if (ctr > 0.5) score += 10;
-        
-        // Pontuação baseada na taxa de compartilhamento
+
         const shareRate = this.calculateShareRate(campaign);
         if (shareRate > 15) score += 25;
         else if (shareRate > 10) score += 15;
         else if (shareRate > 5) score += 10;
-        
-        // Pontuação baseada no investimento (campanhas com investimento moderado são mais eficientes)
-        if (campaign.investimento >= 1000 && campaign.investimento <= 10000) {
-            score += 20;
-        } else if (campaign.investimento >= 500 && campaign.investimento <= 5000) {
-            score += 15;
-        } else {
-            score += 10;
-        }
-        
+
+        if (campaign.investment >= 1000 && campaign.investment <= 10000) score += 20;
+        else if (campaign.investment >= 500 && campaign.investment <= 5000) score += 15;
+        else score += 10;
+
         return Math.min(score, 100);
     }
-    
-    // Gera relatório completo de métricas
+
+    // Generate Full Metrics Report
     static generateFullReport(campaign) {
-        const metricas = campaign.calcularVisualizacoes();
-        
+        const metrics = campaign.calculateViews ? campaign.calculateViews() : {};
         return {
             id: campaign.id,
-            nome: campaign.nome,
-            cliente: campaign.cliente,
-            periodo: {
-                inicio: campaign.dataInicio,
-                fim: campaign.dataFim
+            name: campaign.name,
+            client: campaign.client,
+            period: {
+                start: campaign.startDate,
+                end: campaign.endDate
             },
-            investimento: campaign.investimento,
-            metricas: {
-                visualizacoes: metricas.pessoasPorReal,
-                cliques: metricas.clicam,
-                compartilhamentos: metricas.compartilham,
-                visualizacoesAdicionais: metricas.visualiza,
-                totalAlcance: this.calculateTotalReach(campaign)
+            investment: campaign.investment,
+            metrics: {
+                views: metrics.viewsPerCurrency ?? 0,
+                clicks: metrics.clicks ?? 0,
+                shares: metrics.shares ?? 0,
+                additionalViews: metrics.additionalViews ?? 0,
+                totalReach: this.calculateTotalReach(campaign)
             },
             performance: {
                 roi: this.calculateROI(campaign),
                 ctr: this.calculateCTR(campaign),
                 cpc: this.calculateCPC(campaign),
                 cpm: this.calculateCPM(campaign),
-                taxaCompartilhamento: this.calculateShareRate(campaign),
-                eficiencia: this.calculateCampaignEfficiency(campaign)
+                shareRate: this.calculateShareRate(campaign),
+                efficiency: this.calculateCampaignEfficiency(campaign)
             },
             status: this.getCampaignStatus(campaign),
-            recomendacoes: this.generateRecommendations(campaign)
+            recommendations: this.generateRecommendations(campaign)
         };
     }
-    
-    // Determines campaign status
+
+    // Determine Campaign Status
     static getCampaignStatus(campaign) {
-        const hoje = new Date();
-        const dataInicio = new Date(campaign.dataInicio);
-        const dataFim = new Date(campaign.dataFim);
-        
-        if (hoje < dataInicio) {
-            return 'Scheduled';
-        } else if (hoje >= dataInicio && hoje <= dataFim) {
-            return 'Active';
-        } else {
-            return 'Finished';
-        }
+        const today = new Date();
+        const startDate = new Date(campaign.startDate);
+        const endDate = new Date(campaign.endDate);
+
+        // Normalize times for reliable comparison
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(23, 59, 59, 999);
+        today.setHours(0, 0, 0, 0);
+
+        if (today < startDate) return 'Scheduled';
+        if (today >= startDate && today <= endDate) return 'Active';
+        return 'Finished';
     }
-    
-    // Gera recomendações baseadas nas métricas
+
+    // Recommendations based on Metrics
     static generateRecommendations(campaign) {
-        const recomendacoes = [];
-        const metricas = campaign.calcularVisualizacoes();
+        const metrics = campaign.calculateViews ? campaign.calculateViews() : {};
         const ctr = this.calculateCTR(campaign);
         const roi = this.calculateROI(campaign);
-        
-        if (ctr < 1) {
-            recomendacoes.push('Considerar otimizar o título e descrição do anúncio para melhorar o CTR');
-        }
-        
-        if (roi < 0) {
-            recomendacoes.push('Avaliar o público-alvo e ajustar o investimento para melhorar o ROI');
-        }
-        
-        if (metricas.compartilham < metricas.clicam * 0.1) {
-            recomendacoes.push('Criar conteúdo mais envolvente para aumentar o compartilhamento');
-        }
-        
-        if (campaign.investimento < 1000) {
-            recomendacoes.push('Considerar aumentar o investimento para melhor alcance');
-        }
-        
-        if (recomendacoes.length === 0) {
-            recomendacoes.push('Campanha performando bem! Manter estratégia atual');
-        }
-        
-        return recomendacoes;
+        const recommendations = [];
+
+        if (ctr < 1) recommendations.push('Consider optimizing the ad title and description to improve CTR.');
+        if (roi < 0) recommendations.push('Evaluate your target audience and adjust investment to improve ROI.');
+        if ((metrics.shares ?? 0) < (metrics.clicks ?? 0) * 0.1) recommendations.push('Create more engaging content to increase sharing.');
+        if (campaign.investment < 1000) recommendations.push('Consider increasing investment for better reach.');
+        if (recommendations.length === 0) recommendations.push('Campaign is performing well! Maintain your current strategy.');
+
+        return recommendations;
     }
 }
 
-// Calculadora de métricas agregadas para múltiplas campanhas
+// --- AGGREGATE METRICS ---
+
 class AggregateMetricsCalculator {
-    // Calcula métricas totais de todas as campanhas
+    // Calculate totals for all campaigns
     static calculateTotalMetrics(campaigns) {
-        if (!campaigns || campaigns.length === 0) {
+        if (!Array.isArray(campaigns) || campaigns.length === 0) {
             return {
-                totalCampanhas: 0,
-                totalInvestido: 0,
-                totalVisualizacoes: 0,
-                totalCliques: 0,
-                totalCompartilhamentos: 0,
-                mediaROI: 0,
-                mediaCTR: 0,
-                campanhasAtivas: 0,
-                campanhasFinalizadas: 0
+                totalCampaigns: 0,
+                totalInvestment: 0,
+                totalViews: 0,
+                totalClicks: 0,
+                totalShares: 0,
+                averageROI: 0,
+                averageCTR: 0,
+                activeCampaigns: 0,
+                finishedCampaigns: 0
             };
         }
-        
-        const totalInvestido = campaigns.reduce((total, camp) => total + camp.investimento, 0);
-        const totalVisualizacoes = campaigns.reduce((total, camp) => {
-            return total + MetricsCalculator.calculateTotalReach(camp);
-        }, 0);
-        
-        const totalCliques = campaigns.reduce((total, camp) => {
-            return total + camp.calcularVisualizacoes().clicam;
-        }, 0);
-        
-        const totalCompartilhamentos = campaigns.reduce((total, camp) => {
-            return total + camp.calcularVisualizacoes().compartilham;
-        }, 0);
-        
-        const mediaROI = campaigns.reduce((total, camp) => {
-            return total + MetricsCalculator.calculateROI(camp);
-        }, 0) / campaigns.length;
-        
-        const mediaCTR = campaigns.reduce((total, camp) => {
-            return total + MetricsCalculator.calculateCTR(camp);
-        }, 0) / campaigns.length;
-        
-        const campanhasAtivas = campaigns.filter(camp => 
-            MetricsCalculator.getCampaignStatus(camp) === 'Active'
-        ).length;
-        
-        const campanhasFinalizadas = campaigns.filter(camp => 
-            MetricsCalculator.getCampaignStatus(camp) === 'Finished'
-        ).length;
-        
+
+        let totalInvestment = 0, totalViews = 0, totalClicks = 0, totalShares = 0, sumROI = 0, sumCTR = 0, activeCampaigns = 0, finishedCampaigns = 0;
+
+        for (const campaign of campaigns) {
+            totalInvestment += campaign.investment;
+            totalViews += MetricsCalculator.calculateTotalReach(campaign);
+            const metrics = campaign.calculateViews ? campaign.calculateViews() : {};
+            totalClicks += metrics.clicks ?? 0;
+            totalShares += metrics.shares ?? 0;
+            sumROI += MetricsCalculator.calculateROI(campaign);
+            sumCTR += MetricsCalculator.calculateCTR(campaign);
+
+            const status = MetricsCalculator.getCampaignStatus(campaign);
+            if (status === 'Active') activeCampaigns++;
+            if (status === 'Finished') finishedCampaigns++;
+        }
+
         return {
-            totalCampanhas: campaigns.length,
-            totalInvestido: Math.round(totalInvestido * 100) / 100,
-            totalVisualizacoes: totalVisualizacoes,
-            totalCliques: totalCliques,
-            totalCompartilhamentos: totalCompartilhamentos,
-            mediaROI: Math.round(mediaROI * 100) / 100,
-            mediaCTR: Math.round(mediaCTR * 100) / 100,
-            campanhasAtivas: campanhasAtivas,
-            campanhasFinalizadas: campanhasFinalizadas
+            totalCampaigns: campaigns.length,
+            totalInvestment: MetricsCalculator.round(totalInvestment),
+            totalViews,
+            totalClicks,
+            totalShares,
+            averageROI: MetricsCalculator.round(sumROI / campaigns.length),
+            averageCTR: MetricsCalculator.round(sumCTR / campaigns.length),
+            activeCampaigns,
+            finishedCampaigns
         };
     }
-    
-    // Gera relatório comparativo entre campanhas
+
+    // Generate Comparison Report between campaigns
     static generateComparisonReport(campaigns) {
-        if (!campaigns || campaigns.length === 0) {
-            return [];
-        }
-        
-        return campaigns.map(campaign => {
+        if (!Array.isArray(campaigns) || campaigns.length === 0) return [];
+        return campaigns.slice().map(campaign => {
             const report = MetricsCalculator.generateFullReport(campaign);
             return {
                 ...report,
                 ranking: this.calculateRanking(campaign, campaigns)
             };
-        }).sort((a, b) => b.performance.eficiencia - a.performance.eficiencia);
+        }).sort((a, b) => b.performance.efficiency - a.performance.efficiency);
     }
-    
-    // Calcula o ranking da campanha
+
+    // Calculate campaign ranking among all campaigns
     static calculateRanking(campaign, allCampaigns) {
-        const sortedCampaigns = allCampaigns.sort((a, b) => {
-            const eficienciaA = MetricsCalculator.calculateCampaignEfficiency(a);
-            const eficienciaB = MetricsCalculator.calculateCampaignEfficiency(b);
-            return eficienciaB - eficienciaA;
+        const sortedCampaigns = allCampaigns.slice().sort((a, b) => {
+            const efficiencyA = MetricsCalculator.calculateCampaignEfficiency(a);
+            const efficiencyB = MetricsCalculator.calculateCampaignEfficiency(b);
+            return efficiencyB - efficiencyA;
         });
-        
         const index = sortedCampaigns.findIndex(camp => camp.id === campaign.id);
         return index + 1;
     }
